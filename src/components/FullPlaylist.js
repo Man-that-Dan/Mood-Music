@@ -7,7 +7,8 @@ class FullPlaylist extends Component{
 
   state = {
     loadedPlaylistId: null,
-    tracks: null
+    tracks: null,
+    features: null
   }
 
   componentDidMount(){
@@ -26,7 +27,10 @@ class FullPlaylist extends Component{
             loadedPlaylistId: data.href.split('/')[5]
           })
         })
-      }
+        .then(() => {  let tracks = this.state.tracks.map( track => track.id ).join(',');
+          this.fetchFeatures(tracks)
+        })
+       }
     }
   }
 
@@ -46,12 +50,27 @@ class FullPlaylist extends Component{
             loadedPlaylistId: data.href.split('/')[5]
           })
         })
+        .then(() => {  let tracks = this.state.tracks.map( track => track.id ).join(',');
+          this.fetchFeatures(tracks)
+        })
       }
     }
   }
 
-  render(){
 
+  
+  fetchFeatures (tracks){
+    fetch('https://api.spotify.com/v1/audio-features/?ids=' + tracks, {
+      headers: {
+        'Authorization' : 'Bearer ' + this.props.accessToken},
+    }).then(response => response.json())
+    .then( data => { 
+        console.log(data)
+    })
+  }
+
+
+  render(){
     let playlist = <p> Please select a playlist. </p> 
 
     if(this.state.tracks && (this.state.loadedPlaylistId === this.props.id) ){
@@ -73,8 +92,6 @@ class FullPlaylist extends Component{
 
     )
   }
-
-    
 }
 
 
