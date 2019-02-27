@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 
 import Playlist from './Playlist';
 
+import Feature from './Feature';
+
 
 class FullPlaylist extends Component{
 
@@ -27,7 +29,8 @@ class FullPlaylist extends Component{
             loadedPlaylistId: data.href.split('/')[5]
           })
         })
-        .then(() => {  let tracks = this.state.tracks.map( track => track.id ).join(',');
+        .then(() => {
+          let tracks = this.state.tracks.map( track => track.id ).join(',');
           this.fetchFeatures(tracks)
         })
        }
@@ -50,7 +53,8 @@ class FullPlaylist extends Component{
             loadedPlaylistId: data.href.split('/')[5]
           })
         })
-        .then(() => {  let tracks = this.state.tracks.map( track => track.id ).join(',');
+        .then(() => {
+          let tracks = this.state.tracks.map( track => track.id ).join(',');
           this.fetchFeatures(tracks)
         })
       }
@@ -65,16 +69,55 @@ class FullPlaylist extends Component{
         'Authorization' : 'Bearer ' + this.props.accessToken},
     }).then(response => response.json())
     .then( data => { 
-        console.log(data)
+      this.setState({
+        features: data.audio_features
+      })
     })
+  }
+
+  getAverage(features){
+
+    let sum = [ {
+      danceability: 0,
+      energy: 0,
+      key: 0,
+      loudness: 0,
+      mode: 0,
+      speechiness: 0,
+      acousticness: 0,
+      instrumentalness: 0,
+      liveness: 0,
+      valence: 0,
+      tempo: 0 } ]
+
+    for(let i = 0; i < features.length; i++){
+      for(var feature in features[i]){
+        if(feature in sum[0]){      
+          sum[0][feature] += parseFloat(features[i][feature])
+        }
+      }
+    }
+
+    for(var property in sum[0]){
+      sum[0][property] = (sum[0][property] / features.length).toFixed(2)
+    }
+
+    return sum[0]
   }
 
 
   render(){
     let playlist = <p> Please select a playlist. </p> 
+    let features = null
+    let playlistFeatures = null
 
-    if(this.state.tracks && (this.state.loadedPlaylistId === this.props.id) ){
-      playlist = this.state.tracks.map( track => <div key = { track.id } > { track.name } </div> )
+    if(this.state.tracks && (this.state.loadedPlaylistId === this.props.id) && this.state.features ){
+      
+      //playlist = this.state.tracks.map( track => <div key = { track.id } > { track.name } </div> )
+      //console.log(this.state.features)
+      playlistFeatures = this.getAverage(this.state.features)
+
+      //features = this.state.features.map( feature => <Feature  featureArr = {feature} /> )
     }
     else{
       playlist = <p> Loading... </p>;
@@ -82,11 +125,14 @@ class FullPlaylist extends Component{
 
     return(
 
-      <div>
+
+      <div className = "FullPlaylist">
         
         { this.props.name ? <Playlist image = { this.props.image } name = {this.props.name}/> : null }
 
-        <div> Full Playlist {playlist} </div>
+        { playlistFeatures  && <Feature featureArr = { playlistFeatures } /> }
+
+        <div> {features} </div>
 
       </div>
 

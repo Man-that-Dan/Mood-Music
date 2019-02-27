@@ -8,7 +8,7 @@ class Playlist extends Component{
 
     if ( this.props.image && this.props.image.length){
       imageUrl = this.props.image[0].url
-      style = {  height: "200px" }
+      style = {  width: "100%" }
     }// Check if image exists
     else{
       style = { display: "none" }
