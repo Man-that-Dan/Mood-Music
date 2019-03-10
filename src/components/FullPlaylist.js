@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import Playlist from './Playlist';
-
 import Feature from './Feature';
+
+
 
 
 class FullPlaylist extends Component{
@@ -14,9 +16,12 @@ class FullPlaylist extends Component{
   }
 
   componentDidMount(){
-    if(this.props.accessToken && this.props.id){
+
+    let playlistId = window.location.href.split('/')[3]
+
+    if(this.props.accessToken && playlistId){
       if( this.state.tracks == null ){
-        fetch('https://api.spotify.com/v1/playlists/' + this.props.id + '/tracks', {
+        fetch('https://api.spotify.com/v1/playlists/' + playlistId + '/tracks', {
           headers: {
             'Authorization' : 'Bearer ' + this.props.accessToken},
         }).then(response => response.json())
@@ -36,33 +41,8 @@ class FullPlaylist extends Component{
        }
     }
   }
-
-  componentDidUpdate(){
-    if(this.props.accessToken && this.props.id){
-      if( this.state.tracks == null || (this.state.tracks && (this.state.loadedPlaylistId !== this.props.id))){
-        fetch('https://api.spotify.com/v1/playlists/' + this.props.id + '/tracks', {
-          headers: {
-            'Authorization' : 'Bearer ' + this.props.accessToken},
-        }).then(response => response.json())
-        .then( data => { 
-          this.setState({
-            tracks: data.items.map( item => {return { 
-              name: item.track.name,
-              id: item.track.id
-           }}),
-            loadedPlaylistId: data.href.split('/')[5]
-          })
-        })
-        .then(() => {
-          let tracks = this.state.tracks.map( track => track.id ).join(',');
-          this.fetchFeatures(tracks)
-        })
-      }
-    }
-  }
-
-
   
+
   fetchFeatures (tracks){
     fetch('https://api.spotify.com/v1/audio-features/?ids=' + tracks, {
       headers: {
@@ -75,6 +55,7 @@ class FullPlaylist extends Component{
     })
   }
 
+  
   getAverage(features){
 
     let sum = [ {
@@ -141,7 +122,12 @@ class FullPlaylist extends Component{
 }
 
 
+const mapStateToProps = state => {
 
+  return {
+    accessToken: state.accessToken
+  };
 
+}
 
-export default FullPlaylist;
+export default connect(mapStateToProps) (FullPlaylist);

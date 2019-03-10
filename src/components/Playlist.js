@@ -15,14 +15,11 @@ class Playlist extends Component{
     }// If image does not exist
 
     return(
-      <div className = "Playlist" onClick={this.props.clicked}>
-
+      <div onClick={this.props.clicked}>
         <img src = { imageUrl } style = {style} alt = { this.props.name } className = "playlistImage"/>
-
         <div className = "Playlist-name"> 
           { this.props.name.length > 40 ? this.props.name.slice(0, 40).concat("...") : this.props.name }
         </div>
-
       </div>
     )
   }
