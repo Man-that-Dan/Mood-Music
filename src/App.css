@@ -39,15 +39,12 @@ html, body {
   color: #123c69;
 }
 
-
 .Playlists {
   display: grid; /* 1 */
   grid-template-columns: repeat(auto-fill, 178px); /* 2 */
   grid-gap: 10px; /* 3 */
   justify-content: center; /* 4 */
 }
-
-
 
 .Playlist {
   background-color: #eee2dc;
@@ -71,7 +68,6 @@ html, body {
   background-color: #f1f1f1;
 }
 
-
 .FullPlaylist {
   flex: 0 0 auto;
   display: flex;
@@ -79,7 +75,6 @@ html, body {
   align-items: center;
   padding: 40px 0;
 }
-
 
 .Feature{
   display: flex;

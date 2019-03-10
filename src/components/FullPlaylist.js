@@ -15,8 +15,8 @@ class FullPlaylist extends Component{
     features: null
   }
 
-  componentDidMount(){
 
+  componentDidMount(){
     let playlistId = window.location.href.split('/')[3]
 
     if(this.props.accessToken && playlistId){
@@ -53,11 +53,10 @@ class FullPlaylist extends Component{
         features: data.audio_features
       })
     })
-  }
+  } // Make a request to get the features for all the tracks
 
-  
+
   getAverage(features){
-
     let sum = [ {
       danceability: 0,
       energy: 0,
@@ -92,42 +91,28 @@ class FullPlaylist extends Component{
     let features = null
     let playlistFeatures = null
 
-    if(this.state.tracks && (this.state.loadedPlaylistId === this.props.id) && this.state.features ){
-      
-      //playlist = this.state.tracks.map( track => <div key = { track.id } > { track.name } </div> )
-      //console.log(this.state.features)
+    if(this.state.tracks && (this.state.loadedPlaylistId === this.props.id) && this.state.features ){  
       playlistFeatures = this.getAverage(this.state.features)
-
-      //features = this.state.features.map( feature => <Feature  featureArr = {feature} /> )
     }
     else{
       playlist = <p> Loading... </p>;
     }
 
     return(
-
-
       <div className = "FullPlaylist">
-        
         { this.props.name ? <Playlist image = { this.props.image } name = {this.props.name}/> : null }
-
         { playlistFeatures  && <Feature featureArr = { playlistFeatures } /> }
-
         <div> {features} </div>
-
       </div>
-
     )
   }
 }
 
 
 const mapStateToProps = state => {
-
   return {
     accessToken: state.accessToken
   };
-
 }
 
 export default connect(mapStateToProps) (FullPlaylist);
