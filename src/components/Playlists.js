@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Playlist from './Playlist';
 import FullPlaylist from './FullPlaylist';
-import { Link } from 'react-router-dom';
+import { Link, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 
@@ -58,13 +58,19 @@ class Playlists extends Component{
 
     return(
       <div>
-        <div className = "Playlists"> { playlists } </div>
-        {this.state.selectedPlaylist ? 
-          <FullPlaylist
+        <Switch>
+          <Route path="/" exact render = { () => 
+            <div className = "Playlists"> { playlists } </div>
+            } />
+
+          <Route path="/:id" render = { () => 
+            <FullPlaylist
             id = { this.state.selectedPlaylist.id } 
             image = { this.state.selectedPlaylist.image }
-            name = { this.state.selectedPlaylist.name } />
-        : null }
+            name = { this.state.selectedPlaylist.name } 
+            />
+            } />
+        </Switch>
       </div>
     );
   }

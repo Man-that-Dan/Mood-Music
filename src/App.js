@@ -35,15 +35,13 @@ class App extends Component {
             <nav>
               <ul>
                 <li> <Link to = "/"> Playlists </Link> </li>
-                <li> <Link to = "/new-playlist"> New Playlist </Link> </li>
               </ul>
             </nav>
           </header>
           {this.state.loggedIn === true ? null : <a href='http://localhost:8888'> Login to Spotify </a> }
 
           <Switch>
-            { this.props.accessToken && <Route path="/" exact component={ Playlists }/> }
-            { this.props.accessToken && <Route path="/:id" component={ FullPlaylist } /> }
+            { this.props.accessToken && <Route path="/" component={ Playlists }/> }
           </Switch>
 
         </div>

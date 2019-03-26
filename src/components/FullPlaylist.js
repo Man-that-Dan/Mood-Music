@@ -17,6 +17,10 @@ class FullPlaylist extends Component{
 
 
   componentDidMount(){
+
+    if(this.props.name){
+      console.log(this.props.name)}
+
     let playlistId = window.location.href.split('/')[3]
 
     if(this.props.accessToken && playlistId){
