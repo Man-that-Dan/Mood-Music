@@ -1,0 +1,12 @@
+
+.Playlist-container{
+
+  width: 300px;
+
+}
+
+.Features{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}

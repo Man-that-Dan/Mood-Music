@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import Playlist from './Playlist';
 import Feature from './Feature';
 
+import './FullPlaylist.css';
+
 
 
 
@@ -89,7 +91,6 @@ class FullPlaylist extends Component{
     return sum[0]
   }
 
-
   render(){
     let playlist = <p> Please select a playlist. </p> 
     let features = null
@@ -100,13 +101,29 @@ class FullPlaylist extends Component{
     }
     else{
       playlist = <p> Loading... </p>;
-    }
+    } //populate playlistFeatures
+
+    if( playlistFeatures ){
+      features = Object.keys(playlistFeatures).map((keyName, i) => (
+        <Feature feature = {keyName} value = {playlistFeatures[keyName]} />
+      ))
+    } //populate features
 
     return(
       <div className = "FullPlaylist">
-        { this.props.name ? <Playlist image = { this.props.image } name = {this.props.name}/> : null }
-        { playlistFeatures  && <Feature featureArr = { playlistFeatures } /> }
-        <div> {features} </div>
+
+        <div className = "Playlist-container">
+        
+          { this.props.name ? <Playlist image = { this.props.image } name = {this.props.name}/> : null }
+
+        </div>
+
+        <div className = "Features">
+
+          { features }
+
+        </div>
+
       </div>
     )
   }

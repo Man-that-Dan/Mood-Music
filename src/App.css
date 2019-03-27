@@ -75,9 +75,3 @@ html, body {
   align-items: center;
   padding: 40px 0;
 }
-
-.Feature{
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
