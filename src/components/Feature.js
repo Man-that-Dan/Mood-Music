@@ -8,27 +8,28 @@ class Feature extends Component{
 
     render(){
 
+      let featureQual = null
+      
+      const exceptions = ["key", "loudness", "mode", "tempo"]
+
+      let isException =  exceptions.includes(this.props.feature)
+
       const style = {
         margin: "5px",
       }
-
+ 
       return(
 
         <div className = "Feature" style = { style }>
 
-            <div> { this.props.feature }: { this.props.value } 
-              <div style={{ width: '90px' }}>
-                <CircularProgressbar 
-                  percentage={this.props.value * 100} 
-                  text={`${(this.props.value * 100).toFixed(2)}%`} />
-              </div>
+          <div> { this.props.feature }: { this.props.value } 
+            <div style={{ width: '90px' }}>
+              <CircularProgressbar 
+                percentage={this.props.value * 100} 
+                text={`${(this.props.value * 100).toFixed(2)}%`} />
             </div>
-
-            {/*<div> Key: { this.props.featureArr.key } </div>
-            <div> Loudness: { this.props.featureArr.loudness } </div>
-            <div> Mode: { this.props.featureArr.mode } </div>
-            <div> Tempo: { this.props.featureArr.tempo } </div>*/}
-
+          </div>
+          
         </div>
 
 
@@ -50,11 +51,5 @@ class Feature extends Component{
     }
 
 }
-
-
-
-
-
-
 
 export default Feature

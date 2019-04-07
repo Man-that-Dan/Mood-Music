@@ -3,8 +3,12 @@ import { connect } from 'react-redux';
 
 import Playlist from './Playlist';
 import Feature from './Feature';
+import Key from './Key';
+import Mode from './Mode';
+
 
 import './FullPlaylist.css';
+import Loudness from './Loudness';
 
 
 
@@ -66,14 +70,14 @@ class FullPlaylist extends Component{
     let sum = [ {
       danceability: 0,
       energy: 0,
-      key: 0,
-      loudness: 0,
-      mode: 0,
       speechiness: 0,
       acousticness: 0,
       instrumentalness: 0,
       liveness: 0,
       valence: 0,
+      key: 0,
+      loudness: 0,
+      mode: 0,
       tempo: 0 } ]
 
     for(let i = 0; i < features.length; i++){
@@ -93,7 +97,7 @@ class FullPlaylist extends Component{
 
   render(){
     let playlist = <p> Please select a playlist. </p> 
-    let features = null
+    let featuresQuant = null //Features that have 100% value, e.g. danceability
     let playlistFeatures = null
 
     if(this.state.tracks && (this.state.loadedPlaylistId === this.props.id) && this.state.features ){  
@@ -104,9 +108,11 @@ class FullPlaylist extends Component{
     } //populate playlistFeatures
 
     if( playlistFeatures ){
-      features = Object.keys(playlistFeatures).map((keyName, i) => (
+
+      featuresQuant = Object.keys(playlistFeatures).slice(0, 7).map((keyName, i) => (
         <Feature feature = {keyName} value = {playlistFeatures[keyName]} />
       ))
+
     } //populate features
 
     return(
@@ -120,7 +126,14 @@ class FullPlaylist extends Component{
 
         <div className = "Features">
 
-          { features }
+          { featuresQuant }
+
+          { playlistFeatures && <Key value = { playlistFeatures.key } /> }
+
+          { playlistFeatures && <Loudness value = { playlistFeatures.loudness } /> }
+
+          { playlistFeatures && <Mode value = { playlistFeatures.mode } /> }
+
 
         </div>
 
