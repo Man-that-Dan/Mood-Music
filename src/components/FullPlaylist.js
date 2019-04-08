@@ -1,17 +1,27 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 import Playlist from './Playlist';
-import Feature from './Feature';
+import Feature from './FeatureQuant';
 import Key from './Key';
 import Mode from './Mode';
-
-
+import Tempo from './Tempo';
 import './FullPlaylist.css';
 import Loudness from './Loudness';
+import styled from 'styled-components';
 
 
+const FeaturesQuant = styled.div`
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+align-items: stretch;
+`
 
+const FeaturesNominal = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+`
 
 class FullPlaylist extends Component{
 
@@ -20,7 +30,6 @@ class FullPlaylist extends Component{
     tracks: null,
     features: null
   }
-
 
   componentDidMount(){
 
@@ -52,7 +61,6 @@ class FullPlaylist extends Component{
     }
   }
   
-
   fetchFeatures (tracks){
     fetch('https://api.spotify.com/v1/audio-features/?ids=' + tracks, {
       headers: {
@@ -64,7 +72,6 @@ class FullPlaylist extends Component{
       })
     })
   } // Make a request to get the features for all the tracks
-
 
   getAverage(features){
     let sum = [ {
@@ -108,40 +115,31 @@ class FullPlaylist extends Component{
     } //populate playlistFeatures
 
     if( playlistFeatures ){
-
       featuresQuant = Object.keys(playlistFeatures).slice(0, 7).map((keyName, i) => (
         <Feature feature = {keyName} value = {playlistFeatures[keyName]} />
       ))
-
     } //populate features
 
     return(
       <div className = "FullPlaylist">
-
         <div className = "Playlist-container">
-        
           { this.props.name ? <Playlist image = { this.props.image } name = {this.props.name}/> : null }
-
         </div>
-
         <div className = "Features">
-
-          { featuresQuant }
-
-          { playlistFeatures && <Key value = { playlistFeatures.key } /> }
-
-          { playlistFeatures && <Loudness value = { playlistFeatures.loudness } /> }
-
-          { playlistFeatures && <Mode value = { playlistFeatures.mode } /> }
-
-
+          <FeaturesNominal> 
+            { playlistFeatures && <Key value = { playlistFeatures.key } /> }
+            { playlistFeatures && <Loudness value = { playlistFeatures.loudness } /> }
+            { playlistFeatures && <Mode value = { playlistFeatures.mode } /> }
+            { playlistFeatures && <Tempo value = { playlistFeatures.tempo } /> }
+          </FeaturesNominal> 
+          <FeaturesQuant>
+            { featuresQuant } 
+          </FeaturesQuant>
         </div>
-
       </div>
     )
   }
 }
-
 
 const mapStateToProps = state => {
   return {

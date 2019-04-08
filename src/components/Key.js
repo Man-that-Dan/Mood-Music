@@ -1,85 +1,73 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
+import FeatureNominal from './FeatureNominal';
 
 class Key extends Component{
+  render(){
+    let key = null;
+    let round = Math.round(this.props.value)
 
-    render(){
+    switch (round) {
 
-      let key = null;
+      case 0: 
+        key = "C"
+        break
 
-      let round = Math.round(this.props.value)
+      case 1: 
+        key = "C#"
+        break
+      
+      case 2: 
+        key = "D"
+        break
 
-      console.log(round)
+      case 3: 
+        key = "D#"
+        break        
 
-      switch (round) {
+      case 4: 
+        key = "E"
+        break
 
-        case 0: 
-          key = "C"
-          break
+      case 5: 
+        key = "F"
+        break
+      
+      case 6: 
+        key = "F#"
+        break
 
-        case 1: 
-          key = "C#"
-          break
-        
-        case 2: 
-          key = "D"
-          break
+      case 7: 
+        key = "G"
+        break  
+      
+      case 8: 
+        key = "G#"
+        break   
 
-        case 3: 
-          key = "D#"
-          break        
+      case 9: 
+        key = "A"
+        break
+      
+      case 10: 
+        key = "A#"
+        break   
 
-        case 4: 
-          key = "E"
-          break
+      case 11: 
+        key = "B"
+        break   
 
-        case 5: 
-          key = "F"
-          break
-        
-        case 6: 
-          key = "F#"
-          break
+      default: 
+        key = "No data";
+        break
 
-        case 7: 
-          key = "G"
-          break  
-        
-        case 8: 
-          key = "G#"
-          break   
+      }
 
-        case 9: 
-          key = "A"
-          break
-        
-        case 10: 
-          key = "A#"
-          break   
-
-        case 11: 
-          key = "B"
-          break   
-
-        default: 
-          key = "No data";
-          break
-
-        }
-
-      return(
-
-        <div>
-
-          { key }
-
-        </div>
-
-        //Key: c=0, csharp.db = 1, -1 if no key 
-
-      )
-
-    }
-
+    return(
+      <FeatureNominal name = "Key" value = { key } />
+      //Key: c=0, csharp.db = 1, -1 if no key 
+    )
+  }
 }
 
 export default Key

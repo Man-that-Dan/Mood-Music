@@ -1,42 +1,32 @@
 import React, { Component } from 'react';
+import FeatureNominal from './FeatureNominal';
 
 class Mode extends Component{
+  render(){
+    let mode = null;
+    let round = Math.round(this.props.value)
 
-    render(){
+    switch (round) {
 
-      let mode = null;
+      case 0: 
+        mode = "Minor"
+        break
 
-      let round = Math.round(this.props.value)
-
-      switch (round) {
-
-        case 0: 
-          mode = "Minor"
-          break
-
-        case 1: 
-          mode = "Major"
-          break
+      case 1: 
+        mode = "Major"
+        break
 
 
-        default: 
-          mode = "No data";
-          break
+      default: 
+        mode = "No data";
+        break
 
-        }
+      }
 
-      return(
-
-        <div>
-
-          { mode }
-
-        </div>
-
-      )
-
-    }
-    
+    return(
+      <FeatureNominal name = "Mode" value = { mode } />
+    )
+  } 
 }
 
 export default Mode

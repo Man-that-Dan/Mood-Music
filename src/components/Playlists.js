@@ -4,9 +4,6 @@ import FullPlaylist from './FullPlaylist';
 import { Link, Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-
-import * as actionTypes from '../store/actions';
-
 class Playlists extends Component{
 
   constructor(props) {
@@ -17,7 +14,6 @@ class Playlists extends Component{
       selectedPlaylist: null
     };
   }
-
 
   componentDidMount() {
     if (this.props.accessToken != null){
@@ -37,11 +33,9 @@ class Playlists extends Component{
     } // Make a request to get all user's Playlists
   }
 
-
   playlistSelected = (playlist) => {
     this.setState({selectedPlaylist: playlist})
   } // Handler for a selected Playlist
-
 
   render() {
     let playlists = []
@@ -75,7 +69,6 @@ class Playlists extends Component{
     );
   }
 }
-
 
 const mapStateToProps = state => {
   return {
