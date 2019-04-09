@@ -38,7 +38,7 @@ class App extends Component {
               </ul>
             </nav>
           </header>
-          {this.state.loggedIn === true ? null : <a href='http://localhost:8888'> Login to Spotify </a> }
+          {this.state.loggedIn === true ? null : <a href='https://spotisci-backend.herokuapp.com/login'> Login to Spotify </a> }
 
           <Switch>
             { this.props.accessToken && <Route path="/" component={ Playlists }/> }
