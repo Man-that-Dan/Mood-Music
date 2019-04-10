@@ -6,7 +6,9 @@ In order to use the app, a user must have a Spotify account.
 
 ### Website
 
-The app is hosted at ...
+The app is hosted at https://spotisci.herokuapp.com
+
+Please allow some time for the servers to wake up, as SpotiSci and its backend are hosted under Heroku's free plan.
 
 ### You can clone the repository and run the app locally with `npm start`
 
