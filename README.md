@@ -1,19 +1,9 @@
-## SpotiSci
+## Mood-Music
 
-This is a React powered app that leverages Spotify Web API to show the musical data behind user's playlists.
+This is a React powered app based on astrakho's spotisci. App uses node backend and React front end. 
+App accesses user's playlists and allows users to see data about playlist and tracks, sort by a specific attribute, and 
+play music. 
 
 In order to use the app, a user must have a Spotify account.
 
-### Website
-
-The app is hosted at https://spotisci.herokuapp.com
-
-Please allow some time for the servers to wake up, as SpotiSci and its backend are hosted under Heroku's free plan.
-
-### You can clone the repository and run the app locally with `npm start`
-
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+To see app, go to http://3.16.80.246:3000
