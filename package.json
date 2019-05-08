@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "cookie-parser": "^1.4.4",
+    "cors": "^2.8.5",
     "query-string": "^6.2.0",
     "react": "^16.7.0",
     "react-circular-progressbar": "^1.0.0",
