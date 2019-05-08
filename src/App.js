@@ -163,7 +163,7 @@ transferPlaybackHere() {
               </ul>
             </nav>
           </header>
-            { this.state.accessToken === null ? <a href='http://18.217.115.146:3004/login'> Login to Spotify </a> : null }
+            { this.state.accessToken === null ? <a href='http://3.16.80.246:3004/login'> Login to Spotify </a> : null }
             { this.state.playerLaunched === null ? <button onClick={this.handleLogin.bind(this)} > then Launch player </button> : null }
 
 
