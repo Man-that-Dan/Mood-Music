@@ -1,4 +1,5 @@
 ## Mood-Music
+![Screenshot](screenshots/Screen_Shot1.png)
 
 This is a React powered app based on astrakho's spotisci. App uses node backend and React front end. 
 App accesses user's playlists and allows users to see data about playlist and tracks, sort by a specific attribute, and 
