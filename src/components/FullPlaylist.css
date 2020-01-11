@@ -1,3 +1,23 @@
 .Playlist-container{
   width: 300px;
 }
+
+.trackName {
+    display: inline-block;
+    left: 19px;
+    position: absolute;
+}
+
+.trackArtist {
+    display: inline-block;
+    right: 27px;
+    position: absolute;
+}
+
+.card {
+  background-color: #1d1d1d !important;
+}
+
+.card-header {
+      background-color: rgba(95, 95, 95, 0.23) !important;
+}

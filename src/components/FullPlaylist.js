@@ -164,7 +164,7 @@ setSort3(){
 setSort4(){
   console.log("clicked");
   this.setState({
-    sortBy: "accousticness"
+    sortBy: "acousticness"
   });
 }
 setSort5(){
@@ -240,17 +240,30 @@ setSort11(){
 
             return b[metric] - a[metric];
         }).map( track =>
-      <button style={trackstyle} className = 'Track' key = {track.id} >
-        {track.name}<br></br><p style={subfont}> {track.artist[0].name}<br></br>Danceability: {track.danceability} Energy: {track.energy} Speechiness: {track.speechiness}
-          Acousticness: {track.acousticness}
-          Instrumentalness: {track.Instrumentalness}
-          Liveness: {track.liveness}
-          Valence: {track.valence}
-          Key: {track.key}
-          Loudness: {track.loudness}
-          Mode: {track.mode}
-          Tempo: {track.tempo} </p>
-      </button>)//.sort( //Sort it ...
+      <div className = "card" style={{margin: '2em', textAlign: 'left'}}>
+        <div className = "card-header" style={{height: '48px'}}>
+          <h5 className = "card-title trackName">{track.name}</h5>
+          <h6 className = "trackArtist"> {track.artist[0].name} </h6>
+        </div>
+        <div className = "card-body">
+
+            <td><Key value = {track.key} /></td>
+
+            <td><div style={wrapperStyle}>Energy <br/>{Math.round(track.energy * 100)}%</div></td>
+            <td><div style={wrapperStyle}>Speechiness <br/>{Math.round(track.speechiness * 100)}%</div></td>
+            <td><div style={wrapperStyle}>Acousticness <br/>{Math.round(track.acousticness * 100)}%</div></td>
+            <td><div style={wrapperStyle}>Instrumentalness <br/>{Math.round(track.instrumentalness * 100)}%</div></td>
+            <td><div style={wrapperStyle}>Liveness <br/>{Math.round(track.liveness * 100)}%</div></td>
+            <td><div style={wrapperStyle}>Valence <br/>{Math.round(track.valence * 100)}%</div></td>
+            <td><div style={wrapperStyle}>Danceability <br/>{Math.round(track.danceability * 100)} %</div></td>
+            <td><Loudness value = {track.loudness} /></td>
+            <td><div style={wrapperStyle}>Tempo <br/>{track.tempo}</div></td>
+
+          <button  className = 'Track btn btn-primary' key = {track.id} > Play </button>
+
+
+        </div>
+      </div>)//.sort( //Sort it ...
       //  function(a,b) { // using a custom sort function that...
             // compares (the keys) by their respective values.
         //    return a - hash[b];
@@ -309,9 +322,15 @@ var trackstyle = {
   fontSize: '18px',
 }
 
-var subfont = {
-  color: '#444444',
-  fontSize: '1em'
+
+
+var wrapperStyle = {
+  display: 'inline-block',
+  padding: '11px',
+  margin: '5px',
+  border: '2px',
+  borderStyle: 'solid',
+  borderColor: '#bab2b5'
 }
 
 export default connect(mapStateToProps) (FullPlaylist);
