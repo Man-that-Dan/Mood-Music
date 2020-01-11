@@ -192,7 +192,7 @@ transferPlaybackHere() {
 
 
           <Switch>
-            { this.props.accessToken && <Route exact strict path="/" component={ Playlists }/> }
+            { this.props.accessToken && <Route  path="/" component={ Playlists }/> }
 
           </Switch>
 
