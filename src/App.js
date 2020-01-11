@@ -154,17 +154,17 @@ transferPlaybackHere() {
         <div className="App">
           <header>
             <div style={titleStyle}>
-            Mood-Music v1
+            Mood-Music v2
             </div>
             <nav>
               <ul>
-                <li> <Link style={TextStyle} to = "/"> Playlists </Link> </li>
-                <li> <Link style={TextStyle} to = "/"> About </Link> </li>
+                <li> <button class="btn btn-primary" to = "/"> Playlists </button> </li>
+                <li> <button class="btn btn-primary" to = "/"> About </button> </li>
               </ul>
             </nav>
           </header>
             { this.state.accessToken === null ? <a href='http://3.16.80.246:3004/login'> Login to Spotify </a> : null }
-            { this.state.playerLaunched === null ? <button onClick={this.handleLogin.bind(this)} > then Launch player </button> : null }
+            { (this.state.playerLaunched === null && this.state.accessToken != null) ? this.handleLogin.bind(this) : null }
 
 
           <Switch>
