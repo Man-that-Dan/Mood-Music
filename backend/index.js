@@ -6,7 +6,8 @@ var cookieParser = require('cookie-parser');
 
 var client_id = 'b73df62cecef48919ce8a24a6b520f42'; // Your client id
 var client_secret = '819f272a2a284a22809cea0488a71ead'; // Your secret
-var redirect_uri = 'http://3.16.80.246:3004/callback'; // Your redirect uri
+var redirect_uri; // Your redirect uri
+var frontend_uri;
 
 /**
  * Generates a random string containing numbers and letters
@@ -32,12 +33,13 @@ app.use(express.static(__dirname + '/public'))
    .use(cookieParser());
 
 app.get('/login', function(req, res) {
-
+  redirect_uri = 'http://' + req.headers.host + '/callback';
+  frontend_uri = 'http://' + req.headers.host.split(':')[0] + ':3000';
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
 
   // your application requests authorization
-  var scope = 'streaming user-read-birthdate user-read-private user-read-email user-read-playback-state';
+  var scope = 'streaming user-read-private user-read-birthdate user-read-playback-state user-modify-playback-state';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
@@ -96,7 +98,7 @@ app.get('/callback', function(req, res) {
 
         // we can also pass the token to the browser to make requests from there
 
-        let uri = process.env.FRONTEND_URI || 'http://3.16.80.246:3000'
+        let uri = frontend_uri || process.env.FRONTEND_URI || 'http://3.16.80.246:3000'
 
         res.redirect( uri + '?' +
           querystring.stringify({
@@ -137,8 +139,8 @@ app.get('/refresh_token', function(req, res) {
   });
 });
 
-let port = process.env.PORT || 8888
 
-console.log(`Listening on port ${3001}.`)
+
+console.log(`Listening on port ${3004}.`)
 
 app.listen(3004);

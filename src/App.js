@@ -15,26 +15,34 @@ class App extends Component {
     super(props);
     this.state = {
       accessToken: null,
+      baseURL: window.location.href.split(':')[1],
       loggedIn: false,
       deviceId: "",
       error: "",
-      trackName: "Track Name",
-      artistName: "Artist Name",
-      albumName: "Album Name",
+      trackName: null,
+      artistName: null,
+      albumName: null,
+      albumCover: null,
       playing: false,
       position: 0,
       duration: 0,
       playerLaunched: null,
     };
     this.playerCheckInterval = null;
+    if(this.props.accessToken == null){
+      let parsed = queryString.parse(window.location.search)
+      if(parsed.access_token == null){
+        window.location.href = this.state.baseURL + ':3004/login';
+      };
+      this.props.onAccesTokenReceived(parsed.access_token)
+      this.state.accessToken = parsed.access_token;
+      this.handleLogin();
+    } // Update the Redux state with new accessToken
   }
 
 
   componentDidMount(){
-    if(this.props.accessToken == null){
-      let parsed = queryString.parse(window.location.search)
-      this.props.onAccesTokenReceived(parsed.access_token)
-    } // Update the Redux state with new accessToken
+
   }
 
   checkForPlayer() {
@@ -75,9 +83,15 @@ createEventHandlers() {
 }
 
 handleLogin() {
+  console.log('token is currently: ' + this.props.accessToken);
   if (this.props.accessToken !== null) {
     this.setState({ loggedIn: true });
     this.setState({ accessToken: this.props.accessToken });
+    // check every second for the player.
+    this.playerCheckInterval = setInterval(() => this.checkForPlayer(), 1000);
+  }
+  if (this.state.accessToken !== null){
+    this.setState({ loggedIn: true });
     // check every second for the player.
     this.playerCheckInterval = setInterval(() => this.checkForPlayer(), 1000);
   }
@@ -93,6 +107,8 @@ onStateChanged(state) {
     } = state.track_window;
     const trackName = currentTrack.name;
     const albumName = currentTrack.album.name;
+
+    const albumCover = currentTrack.album.images[0].url;
     const artistName = currentTrack.artists
       .map(artist => artist.name)
       .join(", ");
@@ -103,17 +119,20 @@ onStateChanged(state) {
       trackName,
       albumName,
       artistName,
+      albumCover,
       playing
     });
+
   }
+
 }
 
 transferPlaybackHere() {
-  const { deviceId, token } = this.state;
+  const { deviceId, accessToken } = this.state;
   fetch("https://api.spotify.com/v1/me/player", {
     method: "PUT",
     headers: {
-      authorization: `Bearer ${token}`,
+      authorization: `Bearer ` + (accessToken || this.props.accessToken),
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
@@ -138,8 +157,10 @@ transferPlaybackHere() {
   }
 
   onPlayClick() {
+
     this.player.togglePlay();
   }
+
 
   onNextClick() {
     this.player.nextTrack();
@@ -149,36 +170,57 @@ transferPlaybackHere() {
 
 
   render() {
+
     return (
       <BrowserRouter>
         <div className="App">
           <header>
-            <div style={titleStyle}>
-            Mood-Music v2
+            <div style={{width: '100%', textAlign: 'left'}}>
+              <div style={titleStyle}>
+              Mood-Music v2
+              </div>
+              <nav style={{display: 'inline-block'}}>
+                <ul>
+                  <li> <Link to = "/"><button className="btn btn-primary" > Playlists </button></Link> </li>
+                  <li> <Link to = "/about"><button className="btn btn-primary" to = "/"> About </button></Link> </li>
+                </ul>
+              </nav>
             </div>
-            <nav>
-              <ul>
-                <li> <button class="btn btn-primary" to = "/"> Playlists </button> </li>
-                <li> <button class="btn btn-primary" to = "/"> About </button> </li>
-              </ul>
-            </nav>
           </header>
-            { this.state.accessToken === null ? <a href='http://3.16.80.246:3004/login'> Login to Spotify </a> : null }
-            { (this.state.playerLaunched === null && this.state.accessToken != null) ? this.handleLogin.bind(this) : null }
+
+
 
 
           <Switch>
-            { this.props.accessToken && <Route path="/" component={ Playlists }/> }
+            { this.props.accessToken && <Route exact strict path="/" component={ Playlists }/> }
 
           </Switch>
 
 
-          { this.state.playerLaunched != null ? <div className="ControlBar">
-            <p>Artist: {this.stateartistName} Track: {this.statetrackName} Album: {this.statealbumName}</p>
-            <p>
-            <button onClick={() => this.onPrevClick()} >Previous</button>
-            <button onClick={() => this.onPlayClick()} >{this.state.playing ? "Pause" : "Play"}</button>
-            <button onClick={() => this.onNextClick()} >Next</button>
+          { this.state.playerLaunched != null ? <div className="ControlBar" style={{textAlign: 'left'}}>
+            <div style={{display: 'inline-block'}} id="currentlyPlaying">
+              <img style={{height: '100px', width: '100px', display: 'inline-block', }} src={this.state.albumCover} />
+              <div style={{display: 'inline-block', verticalAlign: 'bottom', marginLeft: '10px', overflow: 'hidden', maxWidth: '300px'}} >
+                <table>
+                  <tr className={(this.state.trackName != null && this.state.trackName.length > 30) ? "tech-slideshow" : ""}>
+                    <td class="mover-1">
+                      <p  style={{width: '500px', overflow: 'visible', whiteSpace: 'pre'}}>{(this.state.trackName != null && this.state.trackName.length > 30) ? spaces + this.state.trackName : this.state.trackName}</p>
+                    </td>
+                  </tr>
+                  <tr className={(this.state.artistName != null && this.state.artistName.length > 30) ? "tech-slideshow" : ""}>
+                    <td class="mover-1">
+                      <p  style={{opacity: '80%', width: '500px', overflow: 'visible', whiteSpace: 'pre'}}>{(this.state.artistName != null && this.state.artistName.length > 30) ? spaces + this.state.artistName : this.state.artistName}</p>
+                    </td>
+                  </tr>
+                </table>
+
+
+              </div>
+            </div>
+            <p style={{display: 'inline-block'}}>
+            <button style={ controlButton } onClick={() => this.onPrevClick()} ><img style={ controlImage } src= { "images/previous.png" } /></button>
+            <button style={ controlButton } onClick={() => this.onPlayClick()} >{this.state.playing ? <img style={ controlImage } src= { "images/pause.png" } /> : <img style={ controlImage } src= { "images/play.png" } />}</button>
+            <button style={ controlButton } onClick={() => this.onNextClick()} ><img style={ controlImage } src= { "images/next.png" } /></button>
             </p>
 
 
@@ -191,6 +233,8 @@ transferPlaybackHere() {
   }
 }
 
+var spaces = '                                                                              '
+
 var TextStyle = {
   backgroundColor : '#000000',
   color: 'green',
@@ -202,14 +246,25 @@ var TextStyle = {
 
 var titleStyle = {
   fontFamily: 'sans-serif',
-  fontWeight: 'bold',
   textAlign: 'left',
   padding: '1em',
+  display: 'inline-block'
 }
 
 var aboutStyle = {
   padding: '2em',
   fontFamily: 'sans-serif',
+}
+
+var controlButton = {
+  borderRadius: '20%',
+  background: 'white',
+  margin: '10px'
+}
+
+var controlImage = {
+  height: '20px',
+  width: '20px'
 }
 
 const mapStateToProps = state => {
