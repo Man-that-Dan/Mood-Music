@@ -47,16 +47,18 @@ class FullPlaylist extends Component{
         }).then(response => response.json())
         .then( data => {
           this.setState({
-            tracks: data.items.map( item => {return {
-              name: item.track.name,
-              artist: item.track.artists,
-              id: item.track.id,
+            tracks: data.items.map( item => {
+              if(item.track){ return {
+              name: (item.track) ? item.track.name : "",
+              artist: (item.track) ? item.track.artists : [],
+              id: (item.track) ? item.track.id : ""
 
-           }}),
+           }} else {return null}}).filter(function( element ) {return (element !== undefined && element !== null);}),
             loadedPlaylistId: data.href.split('/')[5]
           })
         })
         .then(() => {
+          console.log(this.state.tracks);
           let tracks = this.state.tracks.map( track => track.id ).join(',');
           this.fetchFeatures(tracks)
         })
@@ -210,6 +212,24 @@ setSort11(){
   });
 }
 
+StartPlayback(id, type){
+  var bod = {
+    "context_uri": "spotify:playlist:" + this.props.id
+  }
+  if(type == "track") {
+    bod['offset'] = {"uri": "spotify:track:" + id}
+  }
+  const { accessToken } = this.state;
+  fetch("https://api.spotify.com/v1/me/player/play", {
+    method: "PUT",
+    headers: {
+      authorization: `Bearer ` + (accessToken || this.props.accessToken),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(bod),
+  });
+}
+
 
 
   render(){
@@ -240,6 +260,7 @@ setSort11(){
 
             return b[metric] - a[metric];
         }).map( track =>
+      (track != undefined) ? (
       <div className = "card" style={{margin: '2em', textAlign: 'left'}}>
         <div className = "card-header" style={{height: '48px'}}>
           <h5 className = "card-title trackName">{track.name}</h5>
@@ -259,11 +280,11 @@ setSort11(){
             <td><Loudness value = {track.loudness} /></td>
             <td><div style={wrapperStyle}>Tempo <br/>{track.tempo}</div></td>
 
-          <button  className = 'Track btn btn-primary' key = {track.id} > Play </button>
+          <button  onClick={() => this.StartPlayback(track.id, 'track')} className = 'Track btn btn-primary' key = {track.id} > Play </button>
 
 
         </div>
-      </div>)//.sort( //Sort it ...
+      </div>) : "")//.sort( //Sort it ...
       //  function(a,b) { // using a custom sort function that...
             // compares (the keys) by their respective values.
         //    return a - hash[b];
@@ -274,6 +295,7 @@ setSort11(){
       <div className = "FullPlaylist">
         <div className = "Playlist-container">
           { this.props.name ? <Playlist image = { this.props.image } name = {this.props.name}/> : null }
+          <button  onClick={() => this.StartPlayback(this.props.id, 'playlist')} className = 'PlaylistPlay btn btn-primary' key = {this.props.id} > Play </button>
         </div>
         <div className = "Features">
           <FeaturesNominal>

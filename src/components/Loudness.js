@@ -6,10 +6,10 @@ class Loudness extends Component{
   render(){
     let loudness = null;
 
-    if(this.props.value < -40){
+    if(this.props.value < -10){
       loudness = "Quiet"
     }
-    else if(this.props.value < -20){
+    else if(this.props.value < -7){
       loudness = "Moderate"
     }
     else {

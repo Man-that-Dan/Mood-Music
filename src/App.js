@@ -6,6 +6,7 @@ import queryString from 'query-string';
 import './App.css';
 import Playlists from './components/Playlists';
 import FullPlaylist from './components/FullPlaylist';
+import About from './components/About';
 import * as actionTypes from './store/actions';
 
 
@@ -137,7 +138,7 @@ transferPlaybackHere() {
     },
     body: JSON.stringify({
       "device_ids": [ deviceId ],
-      "play": true,
+
     }),
   });
 }
@@ -192,14 +193,15 @@ transferPlaybackHere() {
 
 
           <Switch>
-            { this.props.accessToken && <Route  path="/" component={ Playlists }/> }
+            <Route exact path="/about" component={ About }/>
+            { (this.props.accessToken && window.location.href.indexOf('about') < 0) ? <Route   path="/" component={ Playlists }/> : null }
 
           </Switch>
 
 
           { this.state.playerLaunched != null ? <div className="ControlBar" style={{textAlign: 'left'}}>
             <div style={{display: 'inline-block'}} id="currentlyPlaying">
-              <img style={{height: '100px', width: '100px', display: 'inline-block', }} src={this.state.albumCover} />
+              {(this.state.albumCover) ? <img style={{height: '100px', width: '100px', display: 'inline-block', }} src={this.state.albumCover} /> : "" }
               <div style={{display: 'inline-block', verticalAlign: 'bottom', marginLeft: '10px', overflow: 'hidden', maxWidth: '300px'}} >
                 <table>
                   <tr className={(this.state.trackName != null && this.state.trackName.length > 30) ? "tech-slideshow" : ""}>
@@ -217,7 +219,7 @@ transferPlaybackHere() {
 
               </div>
             </div>
-            <p style={{display: 'inline-block'}}>
+            <p style={{display: 'inline-block', position: 'absolute', right: '45%', bottom: '2px'}}>
             <button style={ controlButton } onClick={() => this.onPrevClick()} ><img style={ controlImage } src= { "images/previous.png" } /></button>
             <button style={ controlButton } onClick={() => this.onPlayClick()} >{this.state.playing ? <img style={ controlImage } src= { "images/pause.png" } /> : <img style={ controlImage } src= { "images/play.png" } />}</button>
             <button style={ controlButton } onClick={() => this.onNextClick()} ><img style={ controlImage } src= { "images/next.png" } /></button>

@@ -58,8 +58,8 @@ button {
   position: sticky;
   z-index: 100;
   bottom: 0;
-  background-color: #000000;
-  padding-top: 2em;
+  background-color: #2b2b2bf7;
+
 }
 
 .App ul{
